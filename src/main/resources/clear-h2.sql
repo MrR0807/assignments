@@ -1,0 +1,3 @@
+DROP TABLE IF EXISTS bank_user;
+DROP TABLE IF EXISTS account;
+DROP TABLE IF EXISTS account_record;

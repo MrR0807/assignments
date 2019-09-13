@@ -31,6 +31,10 @@ server:
   servlet:
     context-path: /
 
+account:
+  record:
+    pagesize: 20
+
 endpoint:
   account: /account
   authentication: /authentication

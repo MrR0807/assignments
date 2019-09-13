@@ -1,4 +1,4 @@
-package lt.laurynas.uzduotis.authentication.repo;
+package lt.laurynas.uzduotis.authentication;
 
 import lt.laurynas.uzduotis.authentication.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,8 @@ public class AuthenticationRepo {
      * @see <a href="For more information">http://sysout.be/2011/03/09/why-you-should-never-use-getsingleresult-in-jpa/</a>
      */
     public Optional<User> findUser(String email) {
-        List<User> result = em.createQuery("SELECT u from User u " +
+        List<User> result = em.createQuery("" +
+                "SELECT u from User u " +
                 "WHERE u.email = :email", User.class)
                 .setParameter("email", email)
                 .getResultList();

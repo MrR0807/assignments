@@ -9,12 +9,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = {"classpath:clear-h2.sql", "classpath:schema-h2.sql", "classpath:data-h2.sql"})
 public class AuthenticationEndPointTest {
 
     @Value("${endpoint.authentication}")
@@ -39,7 +41,7 @@ public class AuthenticationEndPointTest {
         ResponseEntity<String> response = restTemplate.postForEntity(url + "/register", request, String.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody()).contains("Bad user name");
+        assertThat(response.getBody()).contains("Bad user email");
     }
 
     @Test

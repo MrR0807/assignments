@@ -45,7 +45,7 @@ public class ApiExceptionResponse {
     }
 
     public static ApiExceptionResponse ofApiException(ApiException apiException) {
-        return new ApiExceptionResponse(apiException.statusCode, apiException.timestamp, apiException.reason, apiException.exceptions);
+        return new ApiExceptionResponse(apiException.getStatusCode(), apiException.getTimestamp(), apiException.getReason(), apiException.getExceptions());
     }
 
     public ResponseEntity<ApiExceptionResponse> asResponseEntity() {

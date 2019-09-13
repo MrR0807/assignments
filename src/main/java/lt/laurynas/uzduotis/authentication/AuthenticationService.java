@@ -1,7 +1,6 @@
-package lt.laurynas.uzduotis.authentication.service;
+package lt.laurynas.uzduotis.authentication;
 
 import lt.laurynas.uzduotis.authentication.entity.User;
-import lt.laurynas.uzduotis.authentication.repo.AuthenticationRepo;
 import lt.laurynas.uzduotis.authentication.rest.request.CreateUserRequest;
 import lt.laurynas.uzduotis.exception.ApiException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,11 +23,16 @@ public class AuthenticationService {
     public void register(CreateUserRequest request) {
         Optional<User> maybeUser = repo.findUser(request.getEmail());
         if (maybeUser.isPresent()) {
-            throw ApiException.badRequest("Bad user name");
+            throw ApiException.badRequest("Bad user email");
         }
 
         String encodedPassword = encoder.encode(request.getPassword());
         User user = new User(request.getEmail(), encodedPassword);
         repo.persist(user);
+    }
+
+    public User findUser(String email) {
+        return repo.findUser(email)
+                .orElseThrow(() -> ApiException.notFound("User does not exist"));
     }
 }

@@ -10,10 +10,10 @@ import java.util.List;
 public class ApiException extends RuntimeException {
 
     private static final long serialVersionUID = 6844855207281735148L;
-    protected final int statusCode;
-    protected final LocalDateTime timestamp;
-    protected final String reason;
-    protected final List<ApiExceptionResponse.ApiExceptionDetails> exceptions;
+    private final int statusCode;
+    private final LocalDateTime timestamp;
+    private final String reason;
+    private final List<ApiExceptionResponse.ApiExceptionDetails> exceptions;
 
     private ApiException(int statusCode, LocalDateTime timestamp, String reason, List<ApiExceptionResponse.ApiExceptionDetails> exceptions) {
         super(reason);
@@ -37,5 +37,21 @@ public class ApiException extends RuntimeException {
 
     public static ApiException notFound(String reason, ApiExceptionResponse.ApiExceptionDetails... exceptions) {
         return new ApiException(HttpStatus.NOT_FOUND.value(), LocalDateTime.now(Clock.systemUTC()), reason, Arrays.asList(exceptions));
+    }
+
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public List<ApiExceptionResponse.ApiExceptionDetails> getExceptions() {
+        return exceptions;
     }
 }
