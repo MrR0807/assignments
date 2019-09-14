@@ -38,7 +38,7 @@ public class AccountEndPointTest {
 
     @BeforeClass
     public static void setUp() {
-        HEADERS.add("Auth", "test@test.com:$2a$04$ShL0W16R0.bKg1r/Ku.JKOJb3T8gzeWtY4BlNIZ2Gi15Qe15NzvLa");
+        HEADERS.add("Auth", "test@test.com:s");
         HEADERS.add("Content-Type", "application/json");
     }
 

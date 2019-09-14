@@ -5,7 +5,7 @@ spring:
     banner-mode: "off"
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:asset-catalogue;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:mem:bank_app;DB_CLOSE_ON_EXIT=FALSE
     username: sa
     password:
     platform: h2

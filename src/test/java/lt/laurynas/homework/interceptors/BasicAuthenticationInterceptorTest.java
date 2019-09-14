@@ -8,9 +8,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -23,6 +25,9 @@ public class BasicAuthenticationInterceptorTest {
     @Mock
     private AuthenticationService authenticationService;
 
+    @Spy
+    private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(4);
+
     @InjectMocks
     private BasicAuthenticationInterceptor interceptor;
 
@@ -34,7 +39,7 @@ public class BasicAuthenticationInterceptorTest {
     public void preHandle() throws Exception {
         when(authenticationService.findUser(anyString())).thenReturn(USER);
 
-        request.addHeader("Auth", "test@test.com:$2a$04$ShL0W16R0.bKg1r/Ku.JKOJb3T8gzeWtY4BlNIZ2Gi15Qe15NzvLa");
+        request.addHeader("Auth", "test@test.com:s");
 
         assertThat(interceptor.preHandle(request, response, null)).isTrue();
     }
@@ -55,7 +60,7 @@ public class BasicAuthenticationInterceptorTest {
 
     @Test
     public void preHandle__whenAuthHeaderContainsOnlyPassword() {
-        request.addHeader("Auth", ":$2a$04$ShL0W16R0.bKg1r/Ku.JKOJb3T8gzeWtY4BlNIZ2Gi15Qe15NzvLa");
+        request.addHeader("Auth", ":s");
 
         assertThatThrownBy(() -> interceptor.preHandle(request, response, null)).isInstanceOf(ApiException.class)
                 .hasMessageContaining("Unauthenticated user");
@@ -65,7 +70,7 @@ public class BasicAuthenticationInterceptorTest {
     public void preHandle__whenAuthHeaderContainsEmptySpaces() throws Exception {
         when(authenticationService.findUser(anyString())).thenReturn(USER);
 
-        request.addHeader("Auth", "    test@test.com   :   $2a$04$ShL0W16R0.bKg1r/Ku.JKOJb3T8gzeWtY4BlNIZ2Gi15Qe15NzvLa   ");
+        request.addHeader("Auth", "    test@test.com   :   s   ");
 
         assertThat(interceptor.preHandle(request, response, null)).isTrue();
     }
@@ -83,7 +88,7 @@ public class BasicAuthenticationInterceptorTest {
     @Test
     public void preHandle__whenEmailExceeds255Chars() {
         String authWithLongEmail = StringUtils.repeat("test", 70)
-                .concat("@test.com:$2a$04$ShL0W16R0.bKg1r/Ku.JKOJb3T8gzeWtY4BlNIZ2Gi15Qe15NzvLa");
+                .concat("@test.com:s");
 
         request.addHeader("Auth", authWithLongEmail);
 

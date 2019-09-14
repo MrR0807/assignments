@@ -2,7 +2,6 @@ package lt.laurynas.homework.authentication;
 
 import io.swagger.annotations.Api;
 import lt.laurynas.homework.authentication.rest.request.CreateUserRequest;
-import lt.laurynas.homework.authentication.rest.response.PasswordHash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +27,8 @@ public class AuthenticationEndPoint {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public PasswordHash registerUser(@RequestBody @Valid CreateUserRequest request) {
+    public void registerUser(@RequestBody @Valid CreateUserRequest request) {
         LOGGER.info("Register new user request: {}", request);
-
-        return new PasswordHash(authenticationService.register(request));
+        authenticationService.register(request);
     }
 }

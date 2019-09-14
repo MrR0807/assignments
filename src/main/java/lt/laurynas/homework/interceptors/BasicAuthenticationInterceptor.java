@@ -5,6 +5,7 @@ import lt.laurynas.homework.authentication.AuthenticationService;
 import lt.laurynas.homework.exception.ApiException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,10 +14,12 @@ import javax.servlet.http.HttpServletResponse;
 public class BasicAuthenticationInterceptor extends HandlerInterceptorAdapter {
 
     private final AuthenticationService authenticationService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final static String UNAUTHENTICATED_MESSAGE = "Unauthenticated user";
 
-    public BasicAuthenticationInterceptor(AuthenticationService authenticationService) {
+    public BasicAuthenticationInterceptor(AuthenticationService authenticationService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.authenticationService = authenticationService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
@@ -40,7 +43,7 @@ public class BasicAuthenticationInterceptor extends HandlerInterceptorAdapter {
         }
 
         User user = authenticationService.findUser(email);
-        if (!user.getPassword().equals(password)) {
+        if (!bCryptPasswordEncoder.matches(password, user.getPassword())) {
             throw ApiException.ofExceptions(HttpStatus.FORBIDDEN, UNAUTHENTICATED_MESSAGE);
         }
 
