@@ -18,10 +18,11 @@ CREATE TABLE account
 
 CREATE TABLE account_record
 (
-    id     BIGINT auto_increment NOT NULL,
-    action VARCHAR(50)           NOT NULL,
-    amount DECIMAL(19, 4)        NOT NULL,
-    email  VARCHAR(255)          NOT NULL,
+    id      BIGINT auto_increment NOT NULL,
+    created TIMESTAMP             NOT NULL,
+    action  VARCHAR(50)           NOT NULL,
+    amount  DECIMAL(19, 4)        NOT NULL,
+    email   VARCHAR(255)          NOT NULL,
 
     CONSTRAINT PK__record__id PRIMARY KEY (id),
     CONSTRAINT FK__record__account__email FOREIGN KEY (email) REFERENCES account (email)

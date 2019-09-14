@@ -36,7 +36,7 @@ public class AccountRepository {
 
     public List<RecordView> getRecords(String userEmail) {
         return em.createQuery("" +
-                "SELECT new lt.laurynas.uzduotis.account.view.RecordView(r.id, r.action, r.amount) " +
+                "SELECT new lt.laurynas.uzduotis.account.view.RecordView(r.id, r.created, r.action, r.amount) " +
                 "FROM AccountRecord r " +
                 "WHERE r.account.email = :email " +
                 "ORDER BY r.id DESC", RecordView.class)

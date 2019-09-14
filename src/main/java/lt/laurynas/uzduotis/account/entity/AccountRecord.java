@@ -2,14 +2,15 @@ package lt.laurynas.uzduotis.account.entity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
-//TODO. Add Timestamp
 @Entity
 public class AccountRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private LocalDateTime created;
     @Enumerated(EnumType.STRING)
     private Action action;
     @Column(precision = 19, scale = 4)
@@ -25,6 +26,11 @@ public class AccountRecord {
         this.action = action;
         this.amount = amount;
         this.account = account;
+    }
+
+    @PrePersist
+    private void initCreated() {
+        this.created = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -53,5 +59,9 @@ public class AccountRecord {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public LocalDateTime getCreated() {
+        return created;
     }
 }

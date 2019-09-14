@@ -8,6 +8,6 @@ INSERT INTO account (email, balance) VALUES
 ('test2@test.com', 200),
 ('test3@test.com', 300);
 
-INSERT INTO account_record (action, amount, email) VALUES
-('WITHDRAW', '100', 'test@test.com'),
-('DEPOSIT', '100', 'test@test.com');
+INSERT INTO account_record (created, action, amount, email) VALUES
+('2019-09-14 12:00:00', 'WITHDRAW', '100', 'test@test.com'),
+('2019-09-14 12:00:00', 'DEPOSIT', '100', 'test@test.com');
