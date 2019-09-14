@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -22,6 +23,12 @@ public class AccountService {
     @Autowired
     public AccountService(AccountRepository repo) {
         this.repo = repo;
+    }
+
+    @Transactional
+    public void createNewAccount(String userEmail) {
+        Account account = new Account(userEmail, BigDecimal.ZERO);
+        repo.saveAccount(account);
     }
 
     @Transactional

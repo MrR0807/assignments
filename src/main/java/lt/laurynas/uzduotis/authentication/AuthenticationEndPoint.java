@@ -2,6 +2,7 @@ package lt.laurynas.uzduotis.authentication;
 
 import io.swagger.annotations.Api;
 import lt.laurynas.uzduotis.authentication.rest.request.CreateUserRequest;
+import lt.laurynas.uzduotis.authentication.rest.response.PasswordHash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,9 @@ public class AuthenticationEndPoint {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerUser(@RequestBody @Valid CreateUserRequest request) {
+    public PasswordHash registerUser(@RequestBody @Valid CreateUserRequest request) {
         LOGGER.info("Register new user request: {}", request);
 
-        authenticationService.register(request);
+        return new PasswordHash(authenticationService.register(request));
     }
 }

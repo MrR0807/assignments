@@ -1,8 +1,11 @@
 package lt.laurynas.uzduotis.authentication.rest;
 
+import lt.laurynas.uzduotis.account.AccountService;
+import lt.laurynas.uzduotis.account.view.AccountView;
 import lt.laurynas.uzduotis.authentication.AuthenticationService;
 import lt.laurynas.uzduotis.authentication.entity.User;
 import lt.laurynas.uzduotis.authentication.rest.request.CreateUserRequest;
+import lt.laurynas.uzduotis.authentication.rest.response.PasswordHash;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,15 +33,30 @@ public class AuthenticationEndPointTest {
     @Autowired
     private AuthenticationService authenticationService;
 
+    @Autowired
+    private AccountService accountService;
+
     @Test
-    public void createUser__thenReturn200() {
+    public void createUser__thenReturnPasswordToken() {
         CreateUserRequest request = new CreateUserRequest("test4@test.com", "password");
 
-        ResponseEntity<String> response = restTemplate.postForEntity(url + "/register", request, String.class);
+        ResponseEntity<PasswordHash> response = restTemplate.postForEntity(url + "/register", request, PasswordHash.class);
         User user = authenticationService.findUser("test4@test.com");
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(user.getEmail()).isEqualTo("test4@test.com");
+        assertThat(response.getBody().getPasswordHash()).isNotBlank();
+    }
+
+    @Test
+    public void createUser__thenCreateAccount() {
+        CreateUserRequest request = new CreateUserRequest("test4@test.com", "password");
+        restTemplate.postForEntity(url + "/register", request, PasswordHash.class);
+
+        AccountView account = accountService.getAccount("test4@test.com");
+
+        assertThat(account.getEmail()).isEqualTo("test4@test.com");
+        assertThat(account.getBalance().doubleValue()).isEqualTo(0);
     }
 
     @Test

@@ -15,6 +15,14 @@ public class Account {
     @Column(precision = 19, scale = 4)
     private BigDecimal balance;
 
+    public Account() {
+    }
+
+    public Account(String email, BigDecimal balance) {
+        this.email = email;
+        this.balance = balance;
+    }
+
     public String getEmail() {
         return email;
     }

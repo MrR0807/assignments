@@ -1,5 +1,6 @@
 package lt.laurynas.uzduotis.authentication;
 
+import lt.laurynas.uzduotis.account.AccountService;
 import lt.laurynas.uzduotis.authentication.entity.User;
 import lt.laurynas.uzduotis.authentication.rest.request.CreateUserRequest;
 import lt.laurynas.uzduotis.exception.ApiException;
@@ -14,13 +15,15 @@ public class AuthenticationService {
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(4);
     private final AuthenticationRepo repo;
+    private final AccountService accountService;
 
-    public AuthenticationService(AuthenticationRepo repo) {
+    public AuthenticationService(AuthenticationRepo repo, AccountService accountService) {
         this.repo = repo;
+        this.accountService = accountService;
     }
 
     @Transactional
-    public void register(CreateUserRequest request) {
+    public String register(CreateUserRequest request) {
         Optional<User> maybeUser = repo.findUser(request.getEmail());
         if (maybeUser.isPresent()) {
             throw ApiException.badRequest("Bad user email");
@@ -29,6 +32,8 @@ public class AuthenticationService {
         String encodedPassword = encoder.encode(request.getPassword());
         User user = new User(request.getEmail(), encodedPassword);
         repo.persist(user);
+        accountService.createNewAccount(user.getEmail());
+        return encodedPassword;
     }
 
     public User findUser(String email) {

@@ -24,6 +24,10 @@ public class AccountRepository {
         this.em = em;
     }
 
+    public void saveAccount(Account account) {
+        em.persist(account);
+    }
+
     public Optional<Account> getBalance(String userEmail) {
         List<Account> result = em.createQuery("" +
                 "SELECT a FROM Account a " +
