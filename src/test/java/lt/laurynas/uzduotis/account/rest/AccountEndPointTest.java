@@ -39,6 +39,7 @@ public class AccountEndPointTest {
     @BeforeClass
     public static void setUp() {
         HEADERS.add("Auth", "test@test.com:$2a$04$ShL0W16R0.bKg1r/Ku.JKOJb3T8gzeWtY4BlNIZ2Gi15Qe15NzvLa");
+        HEADERS.add("Content-Type", "application/json");
     }
 
     @Test
@@ -75,6 +76,17 @@ public class AccountEndPointTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
         assertThat(response.getBody()).contains("Unauthenticated user");
+    }
+
+    @Test
+    public void deposit__whenDepositIsTooBigForDatabase__thenReturn400() {
+        String request = "{\"deposit\": 100000000000000000000000000000000000000000000000000000}";
+        HttpEntity<String> depositMoneyRequest = new HttpEntity<>(request, HEADERS);
+
+        ResponseEntity<String> response = restTemplate.postForEntity(url + "/deposit", depositMoneyRequest, String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).contains("Invalid request");
     }
 
     /**
