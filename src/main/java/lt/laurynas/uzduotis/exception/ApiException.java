@@ -27,10 +27,6 @@ public class ApiException extends RuntimeException {
         return new ApiException(status.value(), LocalDateTime.now(Clock.systemUTC()), reason, Arrays.asList(exceptions));
     }
 
-    public static ApiException ofExceptions(HttpStatus status, String reason, List<ApiExceptionResponse.ApiExceptionDetails> exceptions) {
-        return new ApiException(status.value(), LocalDateTime.now(Clock.systemUTC()), reason, exceptions);
-    }
-
     public static ApiException badRequest(String reason, ApiExceptionResponse.ApiExceptionDetails... exceptions) {
         return new ApiException(HttpStatus.BAD_REQUEST.value(), LocalDateTime.now(Clock.systemUTC()), reason, Arrays.asList(exceptions));
     }

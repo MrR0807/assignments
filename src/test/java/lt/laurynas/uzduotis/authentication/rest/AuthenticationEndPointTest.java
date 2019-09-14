@@ -1,5 +1,7 @@
 package lt.laurynas.uzduotis.authentication.rest;
 
+import lt.laurynas.uzduotis.authentication.AuthenticationService;
+import lt.laurynas.uzduotis.authentication.entity.User;
 import lt.laurynas.uzduotis.authentication.rest.request.CreateUserRequest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,13 +27,18 @@ public class AuthenticationEndPointTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+    @Autowired
+    private AuthenticationService authenticationService;
+
     @Test
     public void createUser__thenReturn200() {
         CreateUserRequest request = new CreateUserRequest("test4@test.com", "password");
 
         ResponseEntity<String> response = restTemplate.postForEntity(url + "/register", request, String.class);
+        User user = authenticationService.findUser("test4@test.com");
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(user.getEmail()).isEqualTo("test4@test.com");
     }
 
     @Test

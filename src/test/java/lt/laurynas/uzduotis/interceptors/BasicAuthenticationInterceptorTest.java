@@ -65,7 +65,7 @@ public class BasicAuthenticationInterceptorTest {
     public void preHandle__whenAuthHeaderContainsEmptySpaces() throws Exception {
         when(authenticationService.findUser(anyString())).thenReturn(USER);
 
-        request.addHeader("Auth", "test@test.com   :   $2a$04$ShL0W16R0.bKg1r/Ku.JKOJb3T8gzeWtY4BlNIZ2Gi15Qe15NzvLa");
+        request.addHeader("Auth", "    test@test.com   :   $2a$04$ShL0W16R0.bKg1r/Ku.JKOJb3T8gzeWtY4BlNIZ2Gi15Qe15NzvLa   ");
 
         assertThat(interceptor.preHandle(request, response, null)).isTrue();
     }

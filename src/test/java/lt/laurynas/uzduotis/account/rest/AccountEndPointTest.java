@@ -77,6 +77,9 @@ public class AccountEndPointTest {
         assertThat(response.getBody()).contains("Unauthenticated user");
     }
 
+    /**
+     * In database user: test@test.com has 100 in his bank account
+     */
     @Test
     public void withdraw() {
         WithdrawRequest request = new WithdrawRequest(BigDecimal.valueOf(50));
@@ -92,6 +95,9 @@ public class AccountEndPointTest {
         assertThat(response.getBody().getBalance().doubleValue()).isEqualTo(50);
     }
 
+    /**
+     * In database user: test@test.com has 100 in his bank account
+     */
     @Test
     public void withdraw__whenWithdrawingMoreThanThereIsInAccount__then400() {
         WithdrawRequest request = new WithdrawRequest(BigDecimal.valueOf(10000));
@@ -111,6 +117,9 @@ public class AccountEndPointTest {
         assertThat(response.getBody()).contains("Unauthenticated user");
     }
 
+    /**
+     * In database user: test@test.com has 100 in his bank account
+     */
     @Test
     public void getBalance() {
         HttpEntity<DepositRequest> requestHttpEntity = new HttpEntity<>(null, HEADERS);
@@ -165,10 +174,8 @@ public class AccountEndPointTest {
         restTemplate.postForEntity(url + "/withdraw", withdrawMoneyRequest, String.class);
 
         HttpEntity<DepositRequest> requestHttpEntity = new HttpEntity<>(null, HEADERS);
-
         ResponseEntity<List<RecordView>> response = restTemplate
                 .exchange(url + "/statement", HttpMethod.GET, requestHttpEntity, new ParameterizedTypeReference<List<RecordView>>() {});
-
         RecordView lastRecord = response.getBody().get(0);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -185,10 +192,8 @@ public class AccountEndPointTest {
         restTemplate.postForEntity(url + "/deposit", depositMoneyRequest, String.class);
 
         HttpEntity<DepositRequest> requestHttpEntity = new HttpEntity<>(null, HEADERS);
-
         ResponseEntity<List<RecordView>> response = restTemplate
                 .exchange(url + "/statement", HttpMethod.GET, requestHttpEntity, new ParameterizedTypeReference<List<RecordView>>() {});
-
         RecordView lastRecord = response.getBody().get(0);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
