@@ -18,10 +18,6 @@ public class AuthenticationRepo {
         this.em = em;
     }
 
-    public Optional<User> findUser(long id) {
-        return Optional.ofNullable(em.find(User.class, id));
-    }
-
     /**
      * Getting list of users to avoid handling exception when using getSingleResult()
      *

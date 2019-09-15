@@ -43,7 +43,7 @@ public class AccountEndPointTest {
     }
 
     @Test
-    public void depositMoney() {
+    public void deposit() {
         DepositRequest request = new DepositRequest(BigDecimal.valueOf(10000));
         HttpEntity<DepositRequest> requestHttpEntity = new HttpEntity<>(request, HEADERS);
 
@@ -98,11 +98,13 @@ public class AccountEndPointTest {
         HttpEntity<WithdrawRequest> withdrawMoneyRequest = new HttpEntity<>(request, HEADERS);
         HttpEntity<String> getBalanceRequest = new HttpEntity<>(null, HEADERS);
 
-        restTemplate.postForEntity(url + "/withdraw", withdrawMoneyRequest, String.class);
+        ResponseEntity<String> withdrawResponse = restTemplate
+                .postForEntity(url + "/withdraw", withdrawMoneyRequest, String.class);
 
         ResponseEntity<AccountView> response = restTemplate
                 .exchange(url + "/balance", HttpMethod.GET, getBalanceRequest, AccountView.class);
 
+        assertThat(withdrawResponse.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getBalance().doubleValue()).isEqualTo(50);
     }

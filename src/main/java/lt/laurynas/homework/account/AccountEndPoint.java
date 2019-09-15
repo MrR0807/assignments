@@ -45,6 +45,7 @@ public class AccountEndPoint {
     }
 
     @PostMapping("/withdraw")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void withdraw(@RequestBody @Valid WithdrawRequest withdrawRequest,
                          @ApiIgnore @RequestAttribute("userEmail") String userEmail) {
         LOGGER.info("Withdraw request. Body: {}; User {}", withdrawRequest, userEmail);
@@ -60,7 +61,6 @@ public class AccountEndPoint {
     @GetMapping("/statement")
     public List<RecordView> getStatement(@ApiIgnore @RequestAttribute("userEmail") String userEmail) {
         LOGGER.info("Get statement. User: {}", userEmail);
-
         return accountService.getStatement(userEmail);
     }
 }
