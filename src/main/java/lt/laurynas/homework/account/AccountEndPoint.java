@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * To use these endpoints you have to add Header - Auth : email:password
  * To test it out with currently created users use this information:
- * Auth : test@test.com:$2a$04$ShL0W16R0.bKg1r/Ku.JKOJb3T8gzeWtY4BlNIZ2Gi15Qe15NzvLa
+ * Auth : test@test.com:s
  */
 
 @Api
