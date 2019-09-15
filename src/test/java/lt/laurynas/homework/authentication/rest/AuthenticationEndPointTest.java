@@ -36,7 +36,7 @@ public class AuthenticationEndPointTest {
     private AccountService accountService;
 
     @Test
-    public void createUser__thenReturnPasswordToken() {
+    public void createUser() {
         CreateUserRequest request = new CreateUserRequest("test4@test.com", "password");
 
         ResponseEntity<String> response = restTemplate.postForEntity(url + "/register", request, String.class);
